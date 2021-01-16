@@ -10,21 +10,30 @@ todoList.addEventListener("click", deleteTodo);
 todoList.addEventListener("click", completeTodo);
 
 function addTodo() {
+  //get input value
   const todo = todoInput.value;
   if (!todo) return;
-  const todoObj = {
-      name: todo,
-      complete: false
-  }
-  setLocalTodo(todoObj);
-  setTodo(todoObj);
+  setLocalTodo(todo);
+  setTodo(todo);
+  //clear input value
   todoInput.value = "";
 }
 
 function deleteTodo(e) {
   const item = e.target;
   if (item.classList[0] == "delete") {
+    //get todos
+    const todos = getLocalTodo();
+    //get parent element
     const parent = item.parentElement.parentElement;
+    //get text
+    const span = parent.children[0].innerText;
+    //find index in todos
+    const todoIndex = todos.indexOf(span);
+    // remo from todos and update in localstorage
+    todos.splice(todoIndex, 1);
+    localStorage.setItem("todos", JSON.stringify(todos));
+    //remove dom element
     parent.remove();
   }
 }
@@ -74,7 +83,6 @@ function setTodo(todo) {
   buttonsEl.append(deleteButton);
 
   todoEl.append(spanEl, buttonsEl);
-  console.log(todoEl);
   todoList.append(todoEl);
 }
 
